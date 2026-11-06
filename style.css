@@ -15,8 +15,8 @@
   --body: 1rem;
   --small: 0.8125rem;
   --pad: clamp(16px, 3vw, 3rem);
-  --row: 210px;           /* photo row height */
-  --gap: 8px;
+  --row: 300px;           /* photo row height */
+  --gap: 14px;
   color-scheme: light;
 }
 
@@ -83,16 +83,17 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* the work, on the left */
 .stage { grid-area: stage; min-width: 0; }
-.panel { display: grid; gap: 2.2rem; align-content: start; animation: fade 0.4s ease both; }
+.panel { display: grid; gap: 1.4rem; align-content: start; animation: fade 0.4s ease both; }
 @keyframes fade { from { opacity: 0; } }
-.skills { font-size: var(--big); font-weight: 500; line-height: 1.2; letter-spacing: -0.02em; max-width: 34ch; text-wrap: balance; }
+.skills { font-size: var(--small); color: var(--ink-soft); max-width: 60ch; }
 
-/* creative director: photos in justified rows, fading in one after another */
-.piece { display: grid; gap: 0.7rem; }
-.piece h3 { font-size: var(--small); font-weight: 500; }
-.piece h3 span { color: var(--ink-soft); font-weight: 400; font-family: var(--mono); }
+/* creative director: one grid of photos in even rows that fill the width, fading in one after another */
 .gallery { display: flex; flex-wrap: wrap; gap: var(--gap); }
 .gallery::after { content: ""; flex: 10000 1 0; }
+.gallery.justified { display: grid; gap: var(--gap); }
+.gallery.justified::after { content: none; }
+.jrow { display: flex; gap: var(--gap); }
+.justified .tile { flex: none; max-width: none; }
 .tile {
   flex: var(--r) 1 calc(var(--r) * var(--row));
   max-width: 100%; min-width: 0; cursor: zoom-in;
@@ -106,7 +107,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* management */
 .handles { list-style: none; padding: 0; display: grid; gap: 0.2rem; font-size: var(--big); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; }
-.ask { font-size: var(--body); color: var(--ink-soft); justify-self: start; }
+.ask { font-size: var(--big); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; justify-self: start; }
 
 /* socials: live instagram grids */
 .feeds { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: 1.5rem var(--pad); }
@@ -133,7 +134,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* phones: menu on top, the work below it */
 @media (max-width: 760px) {
-  :root { --row: 120px; --gap: 5px; }
+  :root { --row: 130px; --gap: 6px; }
   .frame { grid-template-columns: minmax(0, 1fr); grid-template-areas: "side" "stage"; gap: 2.5rem; }
   .side { position: static; height: auto; gap: 1.6rem; }
   .tag { margin-top: -1.3rem; }

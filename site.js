@@ -33,6 +33,42 @@
   var start = location.hash.slice(1);
   if (start && document.getElementById(start + "-btn")) openSection(start, false);
 
+  // photo grid: fill each row edge to edge, keeping every photo's shape (like a contact sheet).
+  // The last row keeps the normal height instead of stretching.
+  var gallery = document.querySelector(".gallery");
+  function layout() {
+    if (!gallery || !gallery.offsetWidth) return;
+    var W = gallery.clientWidth;
+    var cs = getComputedStyle(gallery);
+    var target = parseFloat(cs.getPropertyValue("--row")) || 300;
+    var gap = parseFloat(cs.columnGap) || 0;
+    var items = Array.prototype.slice.call(gallery.querySelectorAll(".tile"));
+    var rows = [], row = [], sum = 0;
+    items.forEach(function (t) {
+      var r = parseFloat(t.style.getPropertyValue("--r")) || 1;
+      row.push([t, r]); sum += r;
+      if (sum * target + gap * (row.length - 1) >= W) { rows.push([row, (W - gap * (row.length - 1)) / sum]); row = []; sum = 0; }
+    });
+    if (row.length) rows.push([row, Math.min(target, (W - gap * (row.length - 1)) / sum)]);
+    var frag = document.createDocumentFragment();
+    rows.forEach(function (rw) {
+      var div = document.createElement("div");
+      div.className = "jrow";
+      rw[0].forEach(function (p) { p[0].style.width = Math.floor(p[1] * rw[1] * 100) / 100 + "px"; div.appendChild(p[0]); });
+      frag.appendChild(div);
+    });
+    gallery.replaceChildren(frag);
+    gallery.classList.add("justified");
+  }
+  if (gallery) {
+    if ("ResizeObserver" in window) {
+      var lastW = 0;
+      new ResizeObserver(function () { if (gallery.clientWidth !== lastW) { lastW = gallery.clientWidth; layout(); } }).observe(gallery);
+    } else {
+      window.addEventListener("resize", layout);
+    }
+  }
+
   // photo viewer
   var viewer = document.getElementById("viewer");
   var img = viewer.querySelector("img");
