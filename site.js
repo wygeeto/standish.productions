@@ -30,6 +30,13 @@
       openSection(b.getAttribute("aria-expanded") === "true" ? null : id, true);
     });
   });
+  // clicking the name goes back to the home view: everything closed, back at the top
+  var home = document.getElementById("home");
+  if (home) home.addEventListener("click", function (ev) {
+    ev.preventDefault();
+    openSection(null, false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
   var start = location.hash.slice(1);
   if (start && document.getElementById(start + "-btn")) openSection(start, false);
 

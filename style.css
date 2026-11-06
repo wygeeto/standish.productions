@@ -36,7 +36,7 @@ a:active, button:active { opacity: 0.7; }
 :focus-visible { outline: 2px solid var(--on); outline-offset: 3px; }
 h1, h3, p, ul, figure { margin: 0; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-transform: inherit; }
-.u, .contact:hover, .sec:hover span:first-child, .handles a:hover, .mine a:hover, .feed a:hover, .ask:hover {
+.u, .name a:hover, .contact:hover, .sec:hover span:first-child, .handles a:hover, .mine a:hover, .feed a:hover, .ask:hover {
   text-decoration: underline; text-underline-offset: 0.12em; text-decoration-thickness: 1px;
 }
 
@@ -85,7 +85,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .stage { grid-area: stage; min-width: 0; }
 .panel { display: grid; gap: 1.4rem; align-content: start; animation: fade 0.4s ease both; }
 @keyframes fade { from { opacity: 0; } }
-.skills { font-size: var(--small); color: var(--ink-soft); max-width: 60ch; }
+.skills { font-size: var(--big); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; max-width: 34ch; text-wrap: balance; }
 
 /* creative director: one grid of photos in even rows that fill the width, fading in one after another */
 .gallery { display: flex; flex-wrap: wrap; gap: var(--gap); }
