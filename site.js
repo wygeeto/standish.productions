@@ -93,6 +93,7 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
   var start = location.hash.slice(1);
+  if (start === "socials") start = "media";   // old links to #socials still work
   if (start && document.getElementById(start + "-btn")) openSection(start, false);
 
   // photo grid: fill each row edge to edge, keeping every photo's shape (like a contact sheet).
