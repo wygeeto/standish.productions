@@ -91,7 +91,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* the work, on the left */
 .stage { grid-area: stage; min-width: 0; }
-.panel { display: grid; gap: 1.4rem; align-content: start; animation: fade 0.4s ease both; }
+.panel { display: grid; gap: 1.4rem; align-content: start; animation: fade 0.5s ease both; }
+.fx { animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: var(--d, 0ms); }   /* text in each section fades up when it opens */
 @keyframes fade { from { opacity: 0; } }
 .skills { font-size: var(--big); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; max-width: 34ch; text-wrap: balance; }
 
@@ -142,8 +143,12 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .v-fig { height: 100%; min-height: 0; display: grid; grid-template-rows: minmax(0, 1fr) auto; gap: 0.75rem; justify-items: center; }
 .v-fig img { max-width: 100%; max-height: 100%; object-fit: contain; align-self: center; }
-.v-fig figcaption { font: 500 1.35rem/1.1 "Archivo Narrow", "Arial Narrow", "Helvetica Neue Condensed", sans-serif; letter-spacing: -0.01em; color: var(--ink); text-align: center; }   /* brat-style narrow type */
-.v-prev, .v-next { font-size: var(--big); padding: 1rem; }
+.v-fig figcaption { display: flex; align-items: baseline; justify-content: center; flex-wrap: wrap; gap: 0 0.7rem; color: var(--ink); opacity: 0.5; text-align: center; max-width: 100%; }
+.cap-t { font: 400 1.3rem/1.15 Arimo, Arial, "Helvetica Neue", sans-serif; letter-spacing: -0.02em; display: inline-block; transform: scaleX(0.82); transform-origin: right center; }   /* arial squeezed to 82%: the arial narrow look on every device */
+.cap-n { font: 400 var(--small)/1 var(--mono); font-variant-numeric: tabular-nums; letter-spacing: 0; }   /* same little numbers as the menu counts */
+.v-prev, .v-next { padding: 1rem; display: grid; place-items: center; color: var(--ink); opacity: 0.7; transition: opacity 0.2s ease; }
+.v-prev svg, .v-next svg { display: block; width: 14px; height: 28px; }
+@media (hover: hover) { .v-prev:hover, .v-next:hover { opacity: 1; } }
 .v-close { position: absolute; top: calc(1rem + env(safe-area-inset-top, 0px)); right: max(1rem, env(safe-area-inset-right, 0px)); font-size: var(--small); }
 
 /* phones: menu on top, the work below it */
@@ -165,6 +170,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .panel, .tile, .viewer { animation: none; }
+  .panel, .tile, .viewer, .fx { animation: none; }
   .tile img { transition: none; }
 }

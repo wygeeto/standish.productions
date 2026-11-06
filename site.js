@@ -18,6 +18,8 @@
       b.setAttribute("aria-expanded", on ? "true" : "false");
       document.getElementById(b.getAttribute("aria-controls")).hidden = !on;
     });
+    if (id) document.getElementById(id).querySelectorAll(".skills, .handles li, .feed, .ugc h3, .ugc li, .mine")
+      .forEach(function (el, n) { el.classList.add("fx"); el.style.setProperty("--d", n * 70 + "ms"); });   // text fades in one after another
     document.body.classList.toggle("open", !!id);   // phones hide the bottom chunk while a tab is open
     if (id && history.replaceState) history.replaceState(null, "", "#" + id);
     if (!id && history.replaceState) history.replaceState(null, "", location.pathname);
@@ -97,7 +99,11 @@
     var t = tiles[current], src = t.querySelector("img");
     img.src = src.getAttribute("src");
     img.alt = src.alt;
-    cap.textContent = t.getAttribute("data-caption") + "  ·  " + (current + 1) + " / " + tiles.length;
+    var title = document.createElement("span"), nums = document.createElement("span");
+    title.className = "cap-t"; nums.className = "cap-n";
+    title.textContent = t.getAttribute("data-caption");
+    nums.textContent = t.getAttribute("data-year") + " · " + (current + 1) + " / " + tiles.length;
+    cap.replaceChildren(title, nums);
   }
   function open(i) { opener = tiles[i]; show(i); viewer.hidden = false; document.body.style.overflow = "hidden"; viewer.querySelector(".v-close").focus(); }
   function close() { viewer.hidden = true; img.removeAttribute("src"); document.body.style.overflow = ""; if (opener) opener.focus(); }
