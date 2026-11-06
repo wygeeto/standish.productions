@@ -91,7 +91,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* the work, on the left */
 .stage { grid-area: stage; min-width: 0; }
-.panel { display: grid; gap: 1.4rem; align-content: start; animation: fade 0.5s ease both; }
+.panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.4rem; align-content: start; animation: fade 0.5s ease both; }
 .fx { animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; animation-delay: var(--d, 0ms); }   /* text in each section fades up when it opens */
 @keyframes fade { from { opacity: 0; } }
 .skills { font-size: var(--big); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; max-width: 34ch; text-wrap: balance; }
@@ -99,7 +99,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* creative director: one grid of photos in even rows that fill the width, fading in one after another */
 .gallery { display: flex; flex-wrap: wrap; gap: var(--gap); }
 .gallery::after { content: ""; flex: 10000 1 0; }
-.gallery.justified { display: grid; gap: var(--gap); }
+.gallery.justified { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--gap); min-width: 0; }   /* lets the photo rows re-fit when the window gets narrower */
 .gallery.justified::after { content: none; }
 .jrow { display: flex; gap: var(--gap); }
 .justified .tile { flex: none; max-width: none; }
