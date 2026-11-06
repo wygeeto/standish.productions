@@ -1,4 +1,4 @@
-// New York clock + turn the menu item red for the section on screen.
+// New York clock + keep only one section open (for browsers that don't do it on their own).
 (function () {
   var clock = document.getElementById("clock");
   if (clock) {
@@ -10,16 +10,10 @@
     setInterval(tick, 1000);
   }
 
-  var links = Array.prototype.slice.call(document.querySelectorAll(".nav a"));
-  if (!("IntersectionObserver" in window) || !links.length) return;
-  var seen = new Map();
-  var obs = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) { seen.set(en.target.id, en.isIntersecting); });
-    var first = links.find(function (a) { return seen.get(a.hash.slice(1)); });
-    links.forEach(function (a) { a.classList.toggle("on", a === first); });
-  }, { rootMargin: "0px 0px -55% 0px" });
-  links.forEach(function (a) {
-    var s = document.getElementById(a.hash.slice(1));
-    if (s) obs.observe(s);
+  var secs = Array.prototype.slice.call(document.querySelectorAll("details.sec"));
+  secs.forEach(function (d) {
+    d.addEventListener("toggle", function () {
+      if (d.open) secs.forEach(function (o) { if (o !== d) o.open = false; });
+    });
   });
 })();
