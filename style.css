@@ -11,7 +11,6 @@
   --pink: #ff1f8f;        /* creative director, when open */
   --royal: #2448d6;       /* management, when open */
   --orange: #e6713a;      /* socials, when open (matched to Wyatt's swatch) */
-  --live: #1fb35a;        /* available for work */
   --sans: "Geist", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
   --big: clamp(1.5rem, 1.1rem + 1.2vw, 2.25rem);   /* name and headlines */
@@ -81,7 +80,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .contact { font-size: var(--big); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; margin-top: -1rem; }
 .foot { margin-top: auto; display: grid; gap: 0.05rem; font-size: var(--small); line-height: 1.3; color: var(--ink-soft); }
 .status { display: flex; align-items: center; gap: 0.5em; color: var(--ink); }
-.dot { width: 0.5em; height: 0.5em; border-radius: 50%; background: var(--live); animation: pulse 2.4s ease-in-out infinite; }
+.star { color: var(--ink); font-size: 0.85em; line-height: 1; }
 @keyframes pulse { 50% { opacity: 0.35; } }
 .clock time { font-family: var(--mono); font-variant-numeric: tabular-nums; }
 .mail { user-select: all; }
@@ -115,12 +114,14 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .ask { font-size: var(--big); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; justify-self: start; }
 
 /* socials: live instagram grids */
-.feeds { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: 1.5rem var(--pad); }
-.feed { display: grid; gap: 0.5rem; }
-.feed figcaption { font-size: var(--big); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; }
-.feed iframe { width: 100%; height: 34rem; border: 1px solid var(--line); background: #fff; display: block; }
+.feeds { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.5rem 1rem; }
+.feed { display: grid; gap: 0.5rem; align-content: start; min-width: 0; }
+.feed figcaption { font-size: 1.05rem; font-weight: 500; letter-spacing: -0.01em; line-height: 1.2; overflow-wrap: anywhere; }
+/* each instagram box is drawn at its normal size (340 x 380) and shrunk to fit its column; site.js sets --s */
+.ig { --s: 0.62; height: calc(380px * var(--s)); overflow: hidden; border: 1px solid var(--line); background: #fff; }
+.ig iframe { width: 340px; height: 380px; border: 0; display: block; transform: scale(var(--s)); transform-origin: 0 0; }
 .mine { font-size: var(--big); font-weight: 500; letter-spacing: -0.02em; line-height: 1.3; }
-.mine span { font: 400 var(--small)/1 var(--mono); color: var(--ink-soft); letter-spacing: 0; margin-right: 0.8rem; }
+.mine span { font: 400 var(--small)/1 var(--sans); color: var(--ink); letter-spacing: 0; margin-right: 0.8rem; }
 
 /* full screen photo viewer */
 .viewer {
@@ -145,7 +146,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .tag { margin-top: -1.3rem; }
   .contact { margin-top: -0.6rem; }
   .foot { margin-top: 0; }
-  .feed iframe { height: 30rem; }
+  .feeds { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .viewer { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; padding-top: calc(3rem + env(safe-area-inset-top, 0px)); }
   .v-fig { grid-column: 1; grid-row: 1; }
   .v-prev, .v-next { grid-row: 2; position: static; padding: 0.5rem 1rem; }
@@ -154,6 +155,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dot, .panel, .tile, .viewer { animation: none; }
+  .panel, .tile, .viewer { animation: none; }
   .tile img { transition: none; }
 }

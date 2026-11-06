@@ -76,6 +76,14 @@
     }
   }
 
+  // instagram boxes: shrink each one to fit its column
+  var igs = Array.prototype.slice.call(document.querySelectorAll(".ig"));
+  function fitIg() { igs.forEach(function (b) { if (b.clientWidth) b.style.setProperty("--s", (b.clientWidth / 340).toFixed(4)); }); }
+  if (igs.length) {
+    if ("ResizeObserver" in window) { var ro = new ResizeObserver(fitIg); igs.forEach(function (b) { ro.observe(b); }); }
+    else window.addEventListener("resize", fitIg);
+  }
+
   // photo viewer
   var viewer = document.getElementById("viewer");
   var img = viewer.querySelector("img");
