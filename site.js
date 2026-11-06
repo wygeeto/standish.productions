@@ -20,12 +20,23 @@
     });
     if (id) document.getElementById(id).querySelectorAll(".skills, .handles li, .feed, .ugc h3, .ugc li, .mine, .sites h3, .sites li")
       .forEach(function (el, n) { el.classList.add("fx"); el.style.setProperty("--d", n * 70 + "ms"); });   // text fades in one after another
+    if (id) settle(document.getElementById(id));
     document.body.classList.toggle("open", !!id);   // phones hide the bottom chunk while a tab is open
     if (id && history.replaceState) history.replaceState(null, "", "#" + id);
     if (!id && history.replaceState) history.replaceState(null, "", location.pathname);
     if (id && scroll && window.matchMedia("(max-width: 760px)").matches) {
       document.getElementById(id).scrollIntoView({ behavior: "smooth", block: "start" });
     }
+  }
+  // safety net: the fade-ins start invisible. If the browser doesn't run them (Safari sometimes stalls them),
+  // show everything at once instead of leaving the section blank. Otherwise switch them off once they've finished.
+  function settle(panel) {
+    panel.classList.remove("settled");
+    var check = setTimeout(function () {
+      var a = panel.getAnimations ? panel.getAnimations()[0] : null;
+      if (!a || !(a.currentTime > 50)) panel.classList.add("settled");
+    }, 400);
+    setTimeout(function () { clearTimeout(check); panel.classList.add("settled"); }, 3200);
   }
   buttons.forEach(function (b) {
     b.addEventListener("click", function () {
