@@ -1,1 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="#fff"/><text x="4" y="24" font-family="Helvetica, Arial, sans-serif" font-size="22" font-weight="500" fill="#111">w</text><circle cx="25.5" cy="22" r="2.6" fill="#ff1a00"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+  <!-- white square with the greek flag (27 x 18, nine stripes) centered on it -->
+  <rect width="30" height="30" fill="#ffffff"/>
+  <g transform="translate(1.5 6)">
+    <rect width="27" height="18" fill="#ffffff"/>
+    <g fill="#0d5eaf">
+      <rect y="0" width="27" height="2"/>
+      <rect y="4" width="27" height="2"/>
+      <rect y="8" width="27" height="2"/>
+      <rect y="12" width="27" height="2"/>
+      <rect y="16" width="27" height="2"/>
+      <rect width="10" height="10"/>
+    </g>
+    <g fill="#ffffff">
+      <rect y="4" width="10" height="2"/>
+      <rect x="4" width="2" height="10"/>
+    </g>
+  </g>
+</svg>
