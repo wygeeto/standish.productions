@@ -38,8 +38,10 @@ a:active, button:active { opacity: 0.7; }
 :focus-visible { outline: 2px solid var(--on); outline-offset: 3px; }
 h1, h3, p, ul, figure { margin: 0; }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-transform: inherit; }
-.u, .name a:hover, .contact:hover, .sec:hover span:first-child, .handles a:hover, .mine a:hover, .feed a:hover, .ask:hover {
-  text-decoration: underline; text-underline-offset: 0.12em; text-decoration-thickness: 1px;
+@media (hover: hover) {   /* underline on hover only with a mouse, so taps on phones don't leave a stuck underline */
+  .name a:hover, .contact:hover, .sec:hover span:first-child, .handles a:hover, .mine a:hover, .feed a:hover, .ask:hover {
+    text-decoration: underline; text-underline-offset: 0.12em; text-decoration-thickness: 1px;
+  }
 }
 
 .frame {
@@ -149,6 +151,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   :root { --row: 130px; --gap: 6px; }
   .frame { grid-template-columns: minmax(0, 1fr); grid-template-areas: "side" "stage"; gap: 2.5rem; }
   .side { position: static; height: auto; gap: 1.6rem; }
+  .open .foot { display: none; }
   .name { font-size: 1.9rem; }
   .tag { gap: 0.75rem; }
   .contact { margin-top: -0.6rem; }

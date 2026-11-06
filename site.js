@@ -18,6 +18,7 @@
       b.setAttribute("aria-expanded", on ? "true" : "false");
       document.getElementById(b.getAttribute("aria-controls")).hidden = !on;
     });
+    document.body.classList.toggle("open", !!id);   // phones hide the bottom chunk while a tab is open
     if (id && history.replaceState) history.replaceState(null, "", "#" + id);
     if (!id && history.replaceState) history.replaceState(null, "", location.pathname);
     if (id && scroll && window.matchMedia("(max-width: 760px)").matches) {
