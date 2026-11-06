@@ -1,4 +1,4 @@
-// New York clock + full screen picture viewer.
+// New York clock + turn the menu item red for the section on screen.
 (function () {
   var clock = document.getElementById("clock");
   if (clock) {
@@ -10,39 +10,16 @@
     setInterval(tick, 1000);
   }
 
-  var viewer = document.getElementById("viewer");
-  if (!viewer) return;
-  var stage = viewer.querySelector(".stage");
-  var tiles = Array.prototype.slice.call(document.querySelectorAll(".tile.zoom"));
-  var current = -1;
-  var opener = null;
-
-  function show(i) {
-    current = (i + tiles.length) % tiles.length;
-    var media = tiles[current].querySelector("img, video").cloneNode(true);
-    media.removeAttribute("loading");
-    stage.replaceChildren(media);
-  }
-  function open(i) {
-    opener = tiles[i];
-    show(i);
-    viewer.hidden = false;
-    document.body.style.overflow = "hidden";
-    viewer.querySelector(".close").focus();
-  }
-  function close() {
-    viewer.hidden = true;
-    stage.replaceChildren();
-    document.body.style.overflow = "";
-    if (opener) opener.focus();
-  }
-
-  tiles.forEach(function (t, i) { t.addEventListener("click", function () { open(i); }); });
-  viewer.addEventListener("click", close);
-  document.addEventListener("keydown", function (ev) {
-    if (viewer.hidden) return;
-    if (ev.key === "Escape") close();
-    if (ev.key === "ArrowRight") show(current + 1);
-    if (ev.key === "ArrowLeft") show(current - 1);
+  var links = Array.prototype.slice.call(document.querySelectorAll(".nav a"));
+  if (!("IntersectionObserver" in window) || !links.length) return;
+  var seen = new Map();
+  var obs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) { seen.set(en.target.id, en.isIntersecting); });
+    var first = links.find(function (a) { return seen.get(a.hash.slice(1)); });
+    links.forEach(function (a) { a.classList.toggle("on", a === first); });
+  }, { rootMargin: "0px 0px -55% 0px" });
+  links.forEach(function (a) {
+    var s = document.getElementById(a.hash.slice(1));
+    if (s) obs.observe(s);
   });
 })();
