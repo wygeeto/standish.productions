@@ -20,6 +20,7 @@
     });
     if (id) document.getElementById(id).querySelectorAll(".skills, .handles li, .feed, .ugc h3, .ugc li, .mine, .sites h3, .sites li")
       .forEach(function (el, n) { el.classList.add("fx"); el.style.setProperty("--d", n * 70 + "ms"); });   // text fades in one after another
+    if (id && egg) egg.hidden = true;
     if (id) settle(document.getElementById(id));
     document.body.classList.toggle("open", !!id);   // phones hide the bottom chunk while a tab is open
     if (id && history.replaceState) history.replaceState(null, "", "#" + id);
@@ -46,8 +47,16 @@
   });
   // clicking the name goes back to the home view: everything closed, back at the top
   var home = document.getElementById("home");
+  // easter egg: clicking the name while already on the home view shows a little note in the empty space
+  var egg = document.getElementById("egg");
   if (home) home.addEventListener("click", function (ev) {
     ev.preventDefault();
+    var onHome = !buttons.some(function (b) { return b.getAttribute("aria-expanded") === "true"; });
+    if (onHome && egg) {
+      egg.hidden = true; void egg.offsetWidth; egg.hidden = false;   // restart the fade each click
+      settle(egg);
+      return;
+    }
     openSection(null, false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
