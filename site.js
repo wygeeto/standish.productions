@@ -18,7 +18,7 @@
       b.setAttribute("aria-expanded", on ? "true" : "false");
       document.getElementById(b.getAttribute("aria-controls")).hidden = !on;
     });
-    if (id) document.getElementById(id).querySelectorAll(".skills, .handles li, .feed, .ugc h3, .ugc li, .mine, .sites h3, .sites li")
+    if (id) document.getElementById(id).querySelectorAll(".skills, .handles li, .feed, .ugc h2, .ugc li, .mine, .sites h2, .sites li")
       .forEach(function (el, n) { el.classList.add("fx"); el.style.setProperty("--d", n * 70 + "ms"); });   // text fades in one after another
     if (id && egg) egg.hidden = true;
     if (id) settle(document.getElementById(id));
@@ -109,7 +109,9 @@
 
   // photo viewer
   var viewer = document.getElementById("viewer");
-  var img = viewer.querySelector("img");
+  var img = document.createElement("img");   // made here so the page has no empty image tag until a photo opens
+  img.alt = "";
+  viewer.querySelector(".v-fig").prepend(img);
   var cap = viewer.querySelector("figcaption");
   var tiles = Array.prototype.slice.call(document.querySelectorAll(".tile"));
   var current = 0, opener = null, touchX = null;
