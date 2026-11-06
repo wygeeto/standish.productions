@@ -1,0 +1,151 @@
+/* standish.productions
+   layout: a fixed text column on the left (name, menu, contact, clock), pictures fill the right.
+   one light look on purpose, like a printed contact sheet. */
+:root {
+  --paper: #ffffff;
+  --ink: rgba(10, 10, 10, 0.88);
+  --ink-soft: rgba(10, 10, 10, 0.55);
+  --line: rgba(10, 10, 10, 0.14);
+  --on: #ff1a00;          /* the page you're on */
+  --live: #1fb35a;        /* available for work */
+  --sans: "Geist", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --big: clamp(1.25rem, 1.05rem + 0.6vw, 1.6rem);   /* name, menu, headings */
+  --body: 1rem;
+  --small: 0.8125rem;
+  --pad: clamp(16px, 3vw, 3rem);
+  --row: 230px;           /* gallery row height */
+  --gap: 10px;
+  color-scheme: light;
+}
+@view-transition { navigation: auto; }
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font: 400 var(--body)/1.35 var(--sans);
+  text-transform: lowercase;            /* remove this line to turn off the all-lowercase look */
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
+a:active, .tile:active { opacity: 0.7; }
+:focus-visible { outline: 2px solid var(--on); outline-offset: 3px; }
+h1, h2, p, dl, dd, ul, figure, blockquote { margin: 0; }
+
+.frame {
+  display: grid;
+  grid-template-columns: minmax(200px, 17rem) minmax(0, 1fr);
+  gap: var(--pad);
+  padding-block: var(--pad);
+  padding-left: max(var(--pad), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--pad), env(safe-area-inset-right, 0px));
+  min-height: 100vh;
+}
+
+/* left column */
+.side {
+  position: sticky;
+  top: var(--pad);
+  align-self: start;
+  height: calc(100vh - 2 * var(--pad));
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  font-size: var(--big);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.name { font-weight: 500; }
+.tag { font-size: var(--small); color: var(--ink-soft); letter-spacing: 0; margin-top: -1.1rem; }
+.nav { display: flex; flex-direction: column; }
+.nav a.on { color: var(--on); }
+.foot { margin-top: auto; display: grid; gap: 0.35rem; font-size: var(--small); letter-spacing: 0; color: var(--ink-soft); }
+.status { display: flex; align-items: center; gap: 0.5em; color: var(--ink); }
+.dot { width: 0.5em; height: 0.5em; border-radius: 50%; background: var(--live); animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: 0.35; } }
+.clock time { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* justified gallery: every picture keeps its shape, rows fill the width */
+.gallery { display: flex; flex-wrap: wrap; gap: var(--gap); }
+.gallery::after { content: ""; flex: 10000 1 0; }
+.gallery.short { --row: 190px; }
+.tile {
+  flex: var(--r) 1 calc(var(--r) * var(--row));
+  display: flex; flex-direction: column; gap: 0.4rem;
+  min-width: 0; max-width: 100%;
+  padding: 0; border: 0; background: none; color: inherit; font: inherit; text-align: left; cursor: zoom-in;
+}
+a.tile { cursor: pointer; }
+a.tile:hover { text-decoration: none; }
+.tile img, .tile video {
+  display: block; width: 100%; height: auto; aspect-ratio: var(--r);
+  object-fit: cover; background: var(--line);
+  transition: opacity 0.25s ease;
+}
+.gallery:hover .tile img { opacity: 0.85; }
+.gallery .tile:hover img { opacity: 1; }
+.cap { font-size: var(--small); color: var(--ink-soft); line-height: 1.3; }
+.cap b { font-weight: 500; color: var(--ink); }
+
+/* project + about pages */
+.project, .about { display: grid; gap: 1.6rem; align-content: start; }
+h1 { font-size: var(--big); font-weight: 500; line-height: 1.15; letter-spacing: -0.01em; text-wrap: balance; }
+h2 { font-size: var(--body); font-weight: 500; }
+.meta { display: grid; grid-template-columns: max-content 1fr; gap: 0.2rem 1.5rem; font-size: var(--small); }
+.meta dt { color: var(--ink-soft); }
+.meta a { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
+.pager { display: flex; justify-content: space-between; gap: 1rem; font-size: var(--small); padding-top: 1rem; border-top: 1px solid var(--line); }
+
+.about { max-width: 64rem; }
+.about h1 { max-width: 30ch; }
+.about p { max-width: 62ch; }
+.about section { display: grid; gap: 0.6rem; align-content: start; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 2rem 3rem; }
+.services { list-style: none; padding: 0; display: grid; gap: 0.55rem; }
+.services b { font-weight: 500; }
+.services span { display: block; font-size: var(--small); color: var(--ink-soft); }
+.about .list { margin-top: -1rem; }
+.about .list a { text-decoration: underline; text-underline-offset: 0.15em; text-decoration-thickness: 1px; }
+.quote { padding-top: 1.2rem; border-top: 1px solid var(--line); display: grid; gap: 0.4rem; max-width: 62ch; }
+.quote blockquote { font-size: var(--small); color: var(--ink-soft); }
+.quote figcaption { font-size: var(--small); }
+
+/* full screen viewer */
+.viewer {
+  position: fixed; inset: 0; z-index: 20;
+  background: var(--paper);
+  display: grid; place-items: center;
+  padding: calc(var(--pad) + env(safe-area-inset-top, 0px)) max(var(--pad), env(safe-area-inset-right, 0px))
+           calc(var(--pad) + env(safe-area-inset-bottom, 0px)) max(var(--pad), env(safe-area-inset-left, 0px));
+  cursor: zoom-out;
+}
+.viewer .stage { width: 100%; height: 100%; display: grid; place-items: center; min-height: 0; }
+.viewer img, .viewer video { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
+.viewer .close {
+  position: absolute;
+  top: calc(1rem + env(safe-area-inset-top, 0px)); right: max(1rem, env(safe-area-inset-right, 0px));
+  border: 0; background: none; font: inherit; font-size: var(--small); color: var(--ink); cursor: pointer;
+}
+
+/* phones and small tablets: menu on top, pictures below */
+@media (max-width: 760px) {
+  :root { --row: 150px; --gap: 6px; }
+  .frame { grid-template-columns: minmax(0, 1fr); gap: 2rem; min-height: 0; }
+  .side { position: static; height: auto; display: grid; grid-template-columns: 1fr auto; gap: 0.25rem 1rem; }
+  .name { grid-column: 1; }
+  .tag { grid-column: 1; margin: 0; }
+  .nav { grid-column: 2; grid-row: 1 / span 3; text-align: right; }
+  .contact { grid-column: 2; text-align: right; }
+  .foot { grid-column: 1; grid-row: 3 / span 2; align-self: end; margin-top: 0.75rem; }
+  .gallery.short { --row: 120px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @view-transition { navigation: none; }
+  .dot { animation: none; }
+  .tile img { transition: none; }
+}
