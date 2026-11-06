@@ -1,4 +1,36 @@
 // New York clock, the three sections (tap a headline to show its work), and the full screen photo viewer.
+// check mode: open the site with ?debug to see a small report box (for tracking down browser-specific problems).
+(function () {
+  if (!/[?&]debug/.test(location.search)) return;
+  var errors = [];
+  window.addEventListener("error", function (e) { errors.push((e.message || "error") + " @" + (e.lineno || "?")); });
+  window.addEventListener("unhandledrejection", function (e) { errors.push("promise: " + e.reason); });
+  document.addEventListener("DOMContentLoaded", function () {
+    var box = document.createElement("pre");
+    box.style.cssText = "position:fixed;left:8px;bottom:8px;z-index:99;max-width:min(560px,calc(100vw - 16px));margin:0;padding:8px 10px;" +
+      "background:#111;color:#0f0;font:11px/1.35 ui-monospace,Menlo,monospace;white-space:pre-wrap;text-transform:none;border-radius:6px;opacity:.92";
+    document.body.appendChild(box);
+    function report() {
+      var p = document.querySelector(".panel:not([hidden])"), L = [];
+      L.push(navigator.userAgent);
+      L.push("window " + innerWidth + "x" + innerHeight + "  zoom " + (window.devicePixelRatio || 1) + "  reduce-motion " + matchMedia("(prefers-reduced-motion: reduce)").matches);
+      L.push("site.js " + ((document.currentScript || document.querySelector("script[src*=site]") || {}).src || "").split("?")[1]);
+      if (p) {
+        var r = p.getBoundingClientRect(), cs = getComputedStyle(p);
+        L.push("open: " + p.id + "  x" + Math.round(r.x) + " y" + Math.round(r.y) + " w" + Math.round(r.width) + " h" + Math.round(r.height) +
+               "  opacity " + cs.opacity + "  display " + cs.display + "  visibility " + cs.visibility + "  settled " + p.classList.contains("settled"));
+        var an = p.getAnimations ? p.getAnimations({ subtree: true }) : [];
+        L.push("animations " + an.length + (an[0] ? "  first: " + an[0].animationName + " " + an[0].playState + " t=" + Math.round(an[0].currentTime || 0) : ""));
+        var first = p.firstElementChild; if (first) { var fr = first.getBoundingClientRect(); L.push("first item: " + first.className + " y" + Math.round(fr.y) + " h" + Math.round(fr.height) + " opacity " + getComputedStyle(first).opacity + " color " + getComputedStyle(first).color); }
+        L.push("items " + p.querySelectorAll("*").length + "  scrollY " + Math.round(scrollY) + "  page height " + document.documentElement.scrollHeight);
+      } else L.push("open: none");
+      L.push("errors: " + (errors.length ? errors.join(" | ") : "none"));
+      box.textContent = L.join("\n");
+    }
+    report(); setInterval(report, 500);
+  });
+})();
+
 (function () {
   var clock = document.getElementById("clock");
   if (clock) {
@@ -93,7 +125,7 @@
   if (gallery) {
     if ("ResizeObserver" in window) {
       var lastW = 0;
-      new ResizeObserver(function () { if (gallery.clientWidth !== lastW) { lastW = gallery.clientWidth; layout(); } }).observe(gallery);
+      new ResizeObserver(function () { requestAnimationFrame(function () { if (gallery.clientWidth !== lastW) { lastW = gallery.clientWidth; layout(); } }); }).observe(gallery);   // next frame, so resizing never loops
     } else {
       window.addEventListener("resize", layout);
     }
@@ -101,9 +133,15 @@
 
   // instagram boxes: shrink each one to fit its column
   var igs = Array.prototype.slice.call(document.querySelectorAll(".ig"));
-  function fitIg() { igs.forEach(function (b) { if (b.clientWidth) b.style.setProperty("--s", (b.clientWidth / 340).toFixed(4)); }); }
+  // only reacts to width changes: setting --s changes the box height, which must not trigger it again (that loops)
+  function fitIg() {
+    igs.forEach(function (b) {
+      var w = b.clientWidth;
+      if (w && w !== b._w) { b._w = w; b.style.setProperty("--s", (w / 340).toFixed(4)); }
+    });
+  }
   if (igs.length) {
-    if ("ResizeObserver" in window) { var ro = new ResizeObserver(fitIg); igs.forEach(function (b) { ro.observe(b); }); }
+    if ("ResizeObserver" in window) { var ro = new ResizeObserver(function () { requestAnimationFrame(fitIg); }); igs.forEach(function (b) { ro.observe(b); }); }
     else window.addEventListener("resize", fitIg);
   }
 
