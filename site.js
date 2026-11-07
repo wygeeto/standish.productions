@@ -50,7 +50,7 @@
       b.setAttribute("aria-expanded", on ? "true" : "false");
       document.getElementById(b.getAttribute("aria-controls")).hidden = !on;
     });
-    if (id) document.getElementById(id).querySelectorAll(".skills, .handles li, .feed, .ugc h2, .ugc li, .mine, .sites h2, .sites li")
+    if (id) document.getElementById(id).querySelectorAll(".skills, .handles li, .feed, .others, .ugc h2, .ugc li, .mine, .sites h2, .sites li")
       .forEach(function (el, n) { el.classList.add("fx"); el.style.setProperty("--d", n * 70 + "ms"); });   // text fades in one after another
     if (id && egg) egg.hidden = true;
     if (id) settle(document.getElementById(id));

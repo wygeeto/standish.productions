@@ -137,6 +137,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* each instagram box is drawn at its normal size (340 x 380) and shrunk to fit its column; site.js sets --s */
 .ig { --s: 0.62; height: calc(380px * var(--s)); overflow: hidden; border: 1px solid var(--line); background: #fff; }
 .ig iframe { width: 340px; height: 380px; border: 0; display: block; transform: scale(var(--s)); transform-origin: 0 0; }
+.others { font: 400 var(--small)/1.45 var(--sans); color: var(--ink); margin-top: -0.8rem; }   /* "& others" under the instagram boxes, same look as the ugc lines */
 .ugc { display: grid; gap: 0.6rem; padding-top: 0.4rem; }
 .ugc h2 { font-size: var(--big); font-weight: 500; letter-spacing: -0.02em; line-height: 1.2; }
 .ugc ul { list-style: none; padding: 0; display: grid; gap: 0.2rem; max-width: 46rem; }
