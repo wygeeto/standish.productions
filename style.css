@@ -121,12 +121,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .sites a { font: 400 var(--small)/1.45 var(--sans); color: var(--ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; text-decoration-color: var(--line); transition: text-decoration-color 0.2s ease; }
 @media (hover: hover) { .sites a:hover { text-decoration-color: currentColor; } }
 
-/* home view: the small looping video in the middle of the empty left side (hidden while a section is open) */
-.home { min-height: calc(100vh - 2 * var(--pad)); display: grid; place-content: center; justify-items: center; gap: 1rem; }
-.reel { display: block; width: clamp(90px, 9vw, 140px); height: auto; aspect-ratio: 9 / 16; object-fit: cover; background: var(--line); pointer-events: none; }
-.reel::-webkit-media-controls, .reel::-webkit-media-controls-start-playback-button { display: none !important; -webkit-appearance: none; }   /* no play button, even in iPhone low power mode */
-/* easter egg: small note under the video when the name is clicked on the home view */
-.egg { text-align: center; font-size: var(--small); color: var(--ink); animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+/* easter egg: small note in the middle of the empty left side when the name is clicked on the home view */
+.egg { min-height: calc(100vh - 2 * var(--pad)); display: grid; place-items: center; text-align: center;
+       font-size: var(--small); color: var(--ink); animation: rise 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .egg a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
 
 /* management */
@@ -177,8 +174,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   .tag { gap: 0.75rem; }
   .contact { margin-top: -0.6rem; }
   .foot { margin-top: 0; }
-  .home { min-height: 0; padding-block: 4rem 3rem; }
-  .reel { width: 100px; }
+  .egg { min-height: 30vh; }
   .feeds { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .feed figcaption { font-size: 0.95rem; }
   .viewer { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; padding-top: calc(3rem + env(safe-area-inset-top, 0px)); }

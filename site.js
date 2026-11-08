@@ -44,7 +44,6 @@
 
   // sections
   var buttons = Array.prototype.slice.call(document.querySelectorAll(".sec"));
-  var homebox = document.getElementById("homebox"), reel = document.querySelector(".reel");
   function openSection(id, scroll) {
     buttons.forEach(function (b) {
       var on = b.getAttribute("aria-controls") === id;
@@ -54,8 +53,6 @@
     if (id) document.getElementById(id).querySelectorAll(".skills, .handles li, .feed, .others, .ugc h2, .ugc li, .mine, .sites h2, .sites li")
       .forEach(function (el, n) { el.classList.add("fx"); el.style.setProperty("--d", n * 70 + "ms"); });   // text fades in one after another
     if (id && egg) egg.hidden = true;
-    if (homebox) homebox.hidden = !!id;   // the home video only shows when no section is open
-    if (reel) { if (id) reel.pause(); else play(); }
     if (id) settle(document.getElementById(id));
     document.body.classList.toggle("open", !!id);   // phones hide the bottom chunk while a tab is open
     if (id && history.replaceState) history.replaceState(null, "", "#" + id);
@@ -95,34 +92,6 @@
     openSection(null, false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
-  // home video: one short silent loop, chosen by the visitor's own local time:
-  // the beach by day, the silhouette at night. ?time=sunset|night shows one on purpose.
-  function play() { var p = reel && reel.play(); if (p && p.catch) p.catch(function () {}); }
-  function pickClip() {
-    var names = reel.getAttribute("data-clips").split(" ");
-    var forced = (location.search.match(/[?&]time=(\w+)/) || [])[1];
-    if (names.indexOf(forced) >= 0) return forced;
-    var hour = new Date().getHours();   // the visitor's own local time, wherever they are
-    var sched = reel.getAttribute("data-schedule").split(" ").map(function (s) { return s.split(":"); });
-    var pick = sched[sched.length - 1][1];   // before the first start hour = still last night
-    sched.forEach(function (s) { if (hour >= +s[0]) pick = s[1]; });
-    return pick;
-  }
-  function setClip() {
-    var n = pickClip();
-    if (reel.getAttribute("data-now") === n) return;
-    reel.setAttribute("data-now", n);
-    reel.poster = reel.getAttribute("data-" + n + "-poster");
-    reel.src = reel.getAttribute("data-" + n);
-    if (!homebox.hidden) play();
-  }
-  if (reel) {
-    reel.disablePictureInPicture = true; reel.disableRemotePlayback = true;   // set here: they aren't valid HTML attributes
-    setClip();
-    setInterval(setClip, 60000);   // switches by itself when the hour turns (e.g. 4pm: road to beach)
-    play();
-    document.addEventListener("touchstart", function once() { if (!homebox.hidden) play(); document.removeEventListener("touchstart", once); }, { passive: true });
-  }
   var start = location.hash.slice(1);
   if (start === "socials") start = "media";   // old links to #socials still work
   if (start && document.getElementById(start + "-btn")) openSection(start, false);
