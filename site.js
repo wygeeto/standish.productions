@@ -95,16 +95,17 @@
     openSection(null, false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
-  // home video: one short silent loop, chosen by the time in New York (the same clock as the bottom of the menu):
-  // the road by day, the beach at golden hour, the silhouette at night. ?time=day|sunset|night shows one on purpose.
+  // home video: one short silent loop, chosen by the visitor's own local time:
+  // the beach at sunrise and sunset, the road by day, the silhouette at night. ?time=day|sunset|night shows one on purpose.
   function play() { var p = reel && reel.play(); if (p && p.catch) p.catch(function () {}); }
   function pickClip() {
     var names = reel.getAttribute("data-clips").split(" ");
     var forced = (location.search.match(/[?&]time=(\w+)/) || [])[1];
     if (names.indexOf(forced) >= 0) return forced;
-    var hour = +new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric", hourCycle: "h23" }).format(new Date());
-    var pick = names[names.length - 1];   // before the first start hour = still last night
-    names.forEach(function (n) { if (hour >= +reel.getAttribute("data-" + n + "-from")) pick = n; });
+    var hour = new Date().getHours();   // the visitor's own local time, wherever they are
+    var sched = reel.getAttribute("data-schedule").split(" ").map(function (s) { return s.split(":"); });
+    var pick = sched[sched.length - 1][1];   // before the first start hour = still last night
+    sched.forEach(function (s) { if (hour >= +s[0]) pick = s[1]; });
     return pick;
   }
   function setClip() {
