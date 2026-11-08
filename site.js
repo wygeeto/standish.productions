@@ -95,10 +95,30 @@
     openSection(null, false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
-  // home video: plays silently on a loop. Phones that refuse autoplay (e.g. low power mode) start it on the first tap.
+  // home video: one short silent loop, chosen by the time in New York (the same clock as the bottom of the menu):
+  // the road by day, the beach at golden hour, the silhouette at night. ?time=day|sunset|night shows one on purpose.
   function play() { var p = reel && reel.play(); if (p && p.catch) p.catch(function () {}); }
+  function pickClip() {
+    var names = reel.getAttribute("data-clips").split(" ");
+    var forced = (location.search.match(/[?&]time=(\w+)/) || [])[1];
+    if (names.indexOf(forced) >= 0) return forced;
+    var hour = +new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric", hourCycle: "h23" }).format(new Date());
+    var pick = names[names.length - 1];   // before the first start hour = still last night
+    names.forEach(function (n) { if (hour >= +reel.getAttribute("data-" + n + "-from")) pick = n; });
+    return pick;
+  }
+  function setClip() {
+    var n = pickClip();
+    if (reel.getAttribute("data-now") === n) return;
+    reel.setAttribute("data-now", n);
+    reel.poster = reel.getAttribute("data-" + n + "-poster");
+    reel.src = reel.getAttribute("data-" + n);
+    if (!homebox.hidden) play();
+  }
   if (reel) {
     reel.disablePictureInPicture = true; reel.disableRemotePlayback = true;   // set here: they aren't valid HTML attributes
+    setClip();
+    setInterval(setClip, 60000);   // switches by itself when the hour turns (e.g. 4pm: road to beach)
     play();
     document.addEventListener("touchstart", function once() { if (!homebox.hidden) play(); document.removeEventListener("touchstart", once); }, { passive: true });
   }
