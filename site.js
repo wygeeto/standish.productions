@@ -96,7 +96,7 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
   // home video: one short silent loop, chosen by the visitor's own local time:
-  // the beach at sunrise and sunset, the road by day, the silhouette at night. ?time=day|sunset|night shows one on purpose.
+  // the beach by day, the silhouette at night. ?time=sunset|night shows one on purpose.
   function play() { var p = reel && reel.play(); if (p && p.catch) p.catch(function () {}); }
   function pickClip() {
     var names = reel.getAttribute("data-clips").split(" ");
