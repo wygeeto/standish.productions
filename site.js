@@ -98,6 +98,7 @@
   // home video: plays silently on a loop. Phones that refuse autoplay (e.g. low power mode) start it on the first tap.
   function play() { var p = reel && reel.play(); if (p && p.catch) p.catch(function () {}); }
   if (reel) {
+    reel.disablePictureInPicture = true; reel.disableRemotePlayback = true;   // set here: they aren't valid HTML attributes
     play();
     document.addEventListener("touchstart", function once() { if (!homebox.hidden) play(); document.removeEventListener("touchstart", once); }, { passive: true });
   }
