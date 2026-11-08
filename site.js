@@ -44,6 +44,7 @@
 
   // sections
   var buttons = Array.prototype.slice.call(document.querySelectorAll(".sec"));
+  var homebox = document.getElementById("homebox"), reel = document.querySelector(".reel");
   function openSection(id, scroll) {
     buttons.forEach(function (b) {
       var on = b.getAttribute("aria-controls") === id;
@@ -53,6 +54,8 @@
     if (id) document.getElementById(id).querySelectorAll(".skills, .handles li, .feed, .others, .ugc h2, .ugc li, .mine, .sites h2, .sites li")
       .forEach(function (el, n) { el.classList.add("fx"); el.style.setProperty("--d", n * 70 + "ms"); });   // text fades in one after another
     if (id && egg) egg.hidden = true;
+    if (homebox) homebox.hidden = !!id;   // the home video only shows when no section is open
+    if (reel) { if (id) reel.pause(); else play(); }
     if (id) settle(document.getElementById(id));
     document.body.classList.toggle("open", !!id);   // phones hide the bottom chunk while a tab is open
     if (id && history.replaceState) history.replaceState(null, "", "#" + id);
@@ -92,6 +95,12 @@
     openSection(null, false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
+  // home video: plays silently on a loop. Phones that refuse autoplay (e.g. low power mode) start it on the first tap.
+  function play() { var p = reel && reel.play(); if (p && p.catch) p.catch(function () {}); }
+  if (reel) {
+    play();
+    document.addEventListener("touchstart", function once() { if (!homebox.hidden) play(); document.removeEventListener("touchstart", once); }, { passive: true });
+  }
   var start = location.hash.slice(1);
   if (start === "socials") start = "media";   // old links to #socials still work
   if (start && document.getElementById(start + "-btn")) openSection(start, false);
